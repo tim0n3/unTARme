@@ -1,14 +1,19 @@
 #!/bin/bash
 
 # Define the directory you want to search for .tar.gz files
-directory="/home/pi/tarfiles"
+directory="/home/pi/backups"
 
 # Define the log file
-log_file="/home/pi/untar.log"
+LOG_FILE="/home/pi/backups/untar.log"
+
+# Function to log messages
+log() {
+    echo "[$(date +'%Y-%m-%d %H:%M:%S')] $1" >> "$LOG_FILE"
+}
 
 # Check if the directory exists
 if [ ! -d "$directory" ]; then
-  echo "$(date +"%Y-%m-%d %T"): Directory does not exist: $directory" >> "$log_file"
+  log "Directory does not exist: $directory"
   exit 1
 fi
 
@@ -16,18 +21,18 @@ fi
 for file in "$directory"/*.tar.gz; do
   if [ -f "$file" ]; then
     # Log the file extraction
-    echo "$(date +"%Y-%m-%d %T"): Extracting $file" >> "$log_file"
+    log "Extracting $file"
     
     # Extract the file using tar with the specified options
-    tar -xvf "$file" --strip-components 3 >> "$log_file" 2>&1
+    tar -xvf "$file" --strip-components 3 >> "$LOG_FILE" 2>&1
     
     # Check if the extraction was successful
     if [ $? -eq 0 ]; then
-      echo "$(date +"%Y-%m-%d %T"): Extraction of $file completed successfully" >> "$log_file"
+      log "Extraction of $file completed successfully"
     else
-      echo "$(date +"%Y-%m-%d %T"): Extraction of $file failed" >> "$log_file"
+      log "Extraction of $file failed"
     fi
   fi
 done
 
-echo "$(date +"%Y-%m-%d %T"): Extraction completed." >> "$log_file"
+log "Extraction completed."
