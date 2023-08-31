@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Define the log file
-LOG_FILE="/home/pi/backups/untar.log"
+LOG_FILE="/home/pi/untar.log"
 VERBOSE=false
 
 # Function to log messages
@@ -43,21 +43,19 @@ if [ ! -d "$directory" ]; then
   exit 1
 fi
 
-# Loop through the directory and extract .tar.gz files
-for file in "$directory"/*.tar.gz; do
-  if [ -f "$file" ]; then
-    # Log and print the file extraction
-    log_or_print "Extracting $file"
-    
-    # Extract the file using tar with the specified options
-    tar -xvf "$file" --strip-components 3 >> "$LOG_FILE" 2>&1
-    
-    # Check if the extraction was successful
-    if [ $? -eq 0 ]; then
-      log_or_print "Extraction of $file completed successfully"
-    else
-      log_or_print "Extraction of $file failed"
-    fi
+# Use find to locate .tar.gz files and process them one by one
+find "$directory" -type f -name "*.tar.gz" -print0 | while IFS= read -r -d '' file; do
+  # Log and print the file extraction
+  log_or_print "Extracting $file"
+  
+  # Extract the file using tar with the specified options
+  tar -xvf "$file" --strip-components 3 >> "$LOG_FILE" 2>&1
+  
+  # Check if the extraction was successful
+  if [ $? -eq 0 ]; then
+    log_or_print "Extraction of $file completed successfully"
+  else
+    log_or_print "Extraction of $file failed"
   fi
 done
 
