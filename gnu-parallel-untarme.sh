@@ -29,6 +29,8 @@ extract_file() {
 # Do NOT remove this...
 # https://github.com/tim0n3/unTARme/issues/3
 export -f extract_file
+export -f log_or_print
+export -f log
 export LOG_FILE VERBOSE
 #...
 
