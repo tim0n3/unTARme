@@ -1,6 +1,6 @@
 #!/bin/bash
 
-LOG_FILE="/home/pi/untar.log"
+LOG_FILE="untar.log"
 VERBOSE=false
 
 log() {
