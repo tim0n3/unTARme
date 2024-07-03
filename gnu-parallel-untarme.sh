@@ -26,6 +26,12 @@ extract_file() {
     fi
 }
 
+# Do NOT remove this...
+# https://github.com/tim0n3/unTARme/issues/3
+export -f extract_file
+export LOG_FILE VERBOSE
+#...
+
 main() {
     while getopts ":v" opt; do
       case $opt in
